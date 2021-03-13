@@ -17,14 +17,14 @@ const user = (sequelize, DataTypes) => {
     });
 
   User.associate = models => {
-    User.hasMany(models.Books, { onDelete: 'CASCADE' });
+    User.hasMany(models.Book, { onDelete: 'CASCADE' });
     User.hasOne(models.Cosim);
     User.hasOne(models.ALS);
     User.hasOne(models.KMeans);
     User.hasMany(models.Merchant);
     User.hasMany(models.Ratings);
-    User.belongsTo(models.Orders);
-    User.hasMany(models.SaveAs)
+    User.belongsTo(models.Order);
+    User.hasMany(models.saveAs)
   };
 
   User.findByLogin = async login => {

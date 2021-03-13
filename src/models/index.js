@@ -10,12 +10,18 @@ const sequelize = new Sequelize(
   {
     host: process.env.DATABASE_URL,
     dialect: 'postgres',
-  },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    }
+  }
 );
 
 const models = {
   User: sequelize.import('./user'),
-  Books: sequelize.import('./book'),
+  Book: sequelize.import('./book'),
   Merchant: sequelize.import('./merchant'),
   Order: sequelize.import('./order'),
   Offer: sequelize.import('./offer'),

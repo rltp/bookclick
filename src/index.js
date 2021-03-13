@@ -26,16 +26,17 @@ app.use(async (req, res, next) => {
 
 // Routes
 
-app.use('/merchant', routes.session);
-app.use('/user', routes.user); // info, recommend, 
-app.use('/books', routes.books);
+app.use('/merchants', routes.merchants); // connected as a merchant
+app.use('/users', routes.users); // list of all users, profiles...
+app.use('/books', routes.books); // infos of a book, search bar, search by genre - recommend based on all users (most popular...)
+app.use('/me', routes.me) // home : recommend, mylist - settings
 
 // Start
 
-const eraseDatabaseOnSync = true;
+const eraseDatabaseOnSync = false;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   app.listen(process.env.PORT || 3000, () =>
-    console.log(`Example app listening on port ${process.env.PORT}!`),
+    console.log(`Les bonbonnes sont remplies de cocaïne !`),
   );
 });

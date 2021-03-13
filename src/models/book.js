@@ -6,18 +6,19 @@ const book = (sequelize, DataTypes) => {
     },
     authors: DataTypes.STRING,
     title: DataTypes.STRING, 
+    tag_name: DataTypes.STRING,
     publication_year: DataTypes.INTEGER,
     language_code: DataTypes.STRING,
     image_url: DataTypes.STRING
   });
 
   Book.associate = models => {
-    Book.hasMany(models.Offers);
+    Book.hasMany(models.Offer);
     Book.hasMany(models.ALS);
     Book.hasMany(models.Cosim);
     Book.hasMany(models.KMeans);
     Book.hasMany(models.Ratings);
-    Book.hasMany(models.SaveAs);
+    Book.hasMany(models.saveAs);
   };
 
   return Book;

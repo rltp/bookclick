@@ -6,8 +6,8 @@ const order_item = (sequelize, DataTypes) => {
     });
   
     Order_Item.associate = models => {
-        Order_Item.belongsToMany(models.Offers);
-        Order_Item.belongsToMany(models.Orders);
+        Order_Item.belongsTo(models.Offer);
+        Order_Item.belongsTo(models.Order);
     };
   
     return Order_Item;

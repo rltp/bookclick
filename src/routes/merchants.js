@@ -14,4 +14,14 @@ router.get('/:userId', async (req, res) => {
   return res.send(user);
 });
 
+router.get('/login', async (req, res) => {});
+
+router.get('/logout', async (req, res) => {}); 
+
+router.post('/addBook', async (req, res) => {}); //add a book sheet
+
+router.get('/settings/infos', async (req, res) => {});
+
+router.post('/settings/modify', async (req, res) => {});
+
 export default router;

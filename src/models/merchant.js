@@ -9,13 +9,15 @@ const merchant = (sequelize, DataTypes) => {
       city: DataTypes.STRING,
       postcode: DataTypes.INTEGER,
       country_code: DataTypes.INTEGER,
-      location: DataTypes.GEOMETRY('POINT'),
+      location: { 
+        type: 'Point'
+      },
       created_at: DataTypes.STRING,
       admin_id: DataTypes.UUID
       });
   
       Merchant.associate = models => {
-        Merchant.hasMany(models.Offers);
+        Merchant.hasMany(models.Offer);
     };
   
     Merchant.findByLogin = async login => {

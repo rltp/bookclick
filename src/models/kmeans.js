@@ -6,8 +6,8 @@ const kmeans = (sequelize, DataTypes) => {
     });
   
     KMeans.associate = models => {
-        KMeans.hasOne(models.User);
-        KMeans.hasOne(models.Book);
+        KMeans.belongsTo(models.User);
+        KMeans.belongsTo(models.Book);
     };
   
     return KMeans;

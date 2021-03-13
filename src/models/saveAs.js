@@ -6,8 +6,8 @@ const saveAs = (sequelize, DataTypes) => {
     });
   
     saveAs.associate = models => {
-        saveAs.hasOne(models.User);
-        saveAs.hasOne(models.Book);
+        saveAs.belongsTo(models.User);
+        saveAs.belongsTo(models.Book);
     };
   
     return saveAs;

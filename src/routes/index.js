@@ -1,9 +1,11 @@
-import session from './session';
-import user from './user';
+import user from './users';
 import books from './books';
+import merchants from './merchants';
+import me from './me';
 
 export default {
-  session,
+  merchants,
   user,
   books,
+  me
 };

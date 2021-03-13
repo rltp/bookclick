@@ -6,8 +6,8 @@ const als = (sequelize, DataTypes) => {
     });
   
     ALS.associate = models => {
-        ALS.hasOne(models.User);
-        ALS.hasOne(models.Book);
+        ALS.belongsTo(models.User);
+        ALS.belongsTo(models.Book);
     };
   
     return ALS;

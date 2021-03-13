@@ -11,8 +11,8 @@ const ratings = (sequelize, DataTypes) => {
     });
   
     Ratings.associate = models => {
-        Ratings.hasOne(models.User);
-        Ratings.hasOne(models.Book);
+        Ratings.belongsTo(models.User);
+        Ratings.belongsTo(models.Book);
     };
   
     return Ratings;

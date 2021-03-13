@@ -1,13 +1,13 @@
 const cosim = (sequelize, DataTypes) => {
     const Cosim = sequelize.define('Cosim', {
-        user_id: DataTypes.UUID,
-        book_id: DataTypes.BIGINT,
+        book_i: DataTypes.BIGINT,
+        book_j: DataTypes.BIGINT,
         similarity: DataTypes.DECIMAL(2)
     });
   
     Cosim.associate = models => {
-        Cosim.hasOne(models.User);
-        Cosim.hasOne(models.Book);
+        Cosim.belongsTo(models.User);
+        Cosim.belongsTo(models.Book);
     };
   
     return Cosim;
