@@ -24,4 +24,4 @@ router.get('/list/:userID', async (req, res) => {
 }); 
 
 
-export default router;
+module.exports = router

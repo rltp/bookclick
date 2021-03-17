@@ -19,17 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(async (req, res, next) => {
   req.context = {
-    models,
-  };
+    models
+  },
   next();
 });
 
 // Routes
-
-app.use('/merchants', routes.merchants); // connected as a merchant
-app.use('/users', routes.users); // list of all users, profiles...
-app.use('/books', routes.books); // infos of a book, search bar, search by genre - recommend based on all users (most popular...)
-app.use('/me', routes.me) // home : recommend, mylist - settings
 
 // Start
 

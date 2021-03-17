@@ -1,14 +1,12 @@
 const kmeans = (sequelize, DataTypes) => {
-    const KMeans = sequelize.define('KMeans', {
-        user_id: DataTypes.UUID,
-        book_id: DataTypes.BIGINT,
+    const KMeans = sequelize.define('kmeans', {
+        user_id: DataTypes.STRING,
+        book_id: DataTypes.STRING,
         prediction: DataTypes.DECIMAL(2)
+    },
+    {
+      timestamps: false
     });
-  
-    KMeans.associate = models => {
-        KMeans.belongsTo(models.User);
-        KMeans.belongsTo(models.Book);
-    };
   
     return KMeans;
   };

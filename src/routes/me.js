@@ -143,4 +143,4 @@ router.post('/settings/edit', async (req, res) => {
   return res.send(edit_infos);
 });
 
-export default router;
+module.exports = router

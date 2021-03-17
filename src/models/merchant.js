@@ -1,7 +1,7 @@
 const merchant = (sequelize, DataTypes) => {
-    const Merchant = sequelize.define('Merchants', {
+    const Merchant = sequelize.define('merchants', {
       id: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         primaryKey: true
       },
       merchant_name: DataTypes.STRING,
@@ -13,11 +13,14 @@ const merchant = (sequelize, DataTypes) => {
         type: 'Point'
       },
       created_at: DataTypes.STRING,
-      admin_id: DataTypes.UUID
+      admin_id: DataTypes.STRING
+      },
+      {
+        timestamps: false
       });
   
       Merchant.associate = models => {
-        Merchant.hasMany(models.Offer);
+        Merchant.belongsTo(models.User, {foreignKey: 'admin_id'});
     };
   
     Merchant.findByLogin = async login => {

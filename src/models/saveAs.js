@@ -1,13 +1,16 @@
 const saveAs = (sequelize, DataTypes) => {
-    const saveAs = sequelize.define('SaveAs', {
-        user_id: DataTypes.UUID,
-        book_id: DataTypes.BIGINT,
+    const saveAs = sequelize.define('saveAs', {
+        user_id: DataTypes.STRING,
+        book_id: DataTypes.STRING,
         category: DataTypes.STRING
+    },
+    {
+      timestamps: false
     });
   
     saveAs.associate = models => {
-        saveAs.belongsTo(models.User);
-        saveAs.belongsTo(models.Book);
+        saveAs.belongsTo(models.User, {foreignKey: 'user_id'});
+        saveAs.belongsTo(models.Book, {foreignKey: 'book_id'});
     };
   
     return saveAs;

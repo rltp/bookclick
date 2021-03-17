@@ -1,14 +1,12 @@
 const als = (sequelize, DataTypes) => {
-    const ALS = sequelize.define('ALS', {
-        user_id: DataTypes.UUID,
-        book_id: DataTypes.BIGINT,
+    const ALS = sequelize.define('als', {
+        user_id: DataTypes.STRING,
+        book_id: DataTypes.STRING,
         prediction: DataTypes.DECIMAL(2)
+    },
+    {
+      timestamps: false
     });
-  
-    ALS.associate = models => {
-        ALS.belongsTo(models.User);
-        ALS.belongsTo(models.Book);
-    };
   
     return ALS;
   };

@@ -105,4 +105,4 @@ router.get('/popular', async (req, res) => {
   return res.send(populars)
 }); 
 
-export default router;
+module.exports = router

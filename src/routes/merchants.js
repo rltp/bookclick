@@ -24,4 +24,4 @@ router.get('/settings/infos', async (req, res) => {});
 
 router.post('/settings/modify', async (req, res) => {});
 
-export default router;
+module.exports = router
