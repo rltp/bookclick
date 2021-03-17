@@ -26,6 +26,12 @@ app.use(async (req, res, next) => {
 
 // Routes
 
+app.use('/books', routes.books)
+app.use('/merchants', routes.books)
+app.use('/users', routes.books)
+app.use('/me', routes.books)
+
+
 // Start
 
 const eraseDatabaseOnSync = false;
