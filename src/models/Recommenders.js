@@ -1,5 +1,3 @@
-import { DataTypes } from "sequelize"
-
 const Recommenders = (sequelize, DataTypes) => {
   const ALS = sequelize.define('als', {
       user_id: DataTypes.STRING,
@@ -24,7 +22,7 @@ const Recommenders = (sequelize, DataTypes) => {
     Cosim.belongsTo(models.Book, { foreignKey: 'book_j' });
   };
 
-  Cosim.similarityTop = (bookID) =>{
+  Cosim.similarityTop = async (bookID) =>{
     //"SELECT C.book_j, B.title FROM public.Cosim JOIN public.Books ON C.book_i = B.book_id WHERE book_i = :book_i ORDER BY similarity DESC"
     return await Cosim.findAll(
       {
@@ -37,7 +35,7 @@ const Recommenders = (sequelize, DataTypes) => {
     )
   }
 
-  ALS.colaborativeTop = (userID) =>{
+  ALS.colaborativeTop = async (userID) =>{
     //"SELECT A.book_id, B.title, A.prediction FROM public.ALs JOIN public.Books B ON A.book_id = B.book_id WHERE user_id = :user_id ORDER BY prediction DESC"
     return await ALS.findAll(
       {
@@ -50,7 +48,7 @@ const Recommenders = (sequelize, DataTypes) => {
     )
   }
 
-  ALS.colaborativeScore = (userID, bookID) => {
+  ALS.colaborativeScore = async (userID, bookID) => {
     //"SELECT A.book_id, B.title, A.prediction FROM public.ALs JOIN public.Books B ON A.book_id = B.book_id WHERE user_id = 55 AND book_id = 55",
     return await ALS.findOne(
       {
