@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize';
 import dotenv from 'dotenv'
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config()
 
@@ -19,19 +21,20 @@ const sequelize = new Sequelize(
   }
 );
 
-const models = {
-  User: sequelize.import('./user'),
-  Book: sequelize.import('./book'),
-  Merchant: sequelize.import('./merchant'),
-  Order: sequelize.import('./order'),
-  Offer: sequelize.import('./offer'),
-  Order_Item: sequelize.import('./order_item'),
-  Ratings: sequelize.import('./rating'),
-  saveAs: sequelize.import('./saveAs'),
-  ALS: sequelize.import('./ALS'),
-  Cosim: sequelize.import('./cosim'),
-  KMeans: sequelize.import('./kmeans')
-};
+const basename = path.basename(__filename);
+let models = {};
+fs
+  .readdirSync(__dirname)
+  .filter(file => {
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+  })
+  .forEach(file => {
+    const name = file.slice(0, -3)
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    models[name] = model;
+  });
+
+console.log(models)
 
 Object.keys(models).forEach(key => {
   if ('associate' in models[key]) {

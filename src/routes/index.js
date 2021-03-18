@@ -1,11 +1,11 @@
-import user from './users';
+import auth from './auth';
+import users from './users';
 import books from './books';
-import merchants from './merchants';
 import me from './me';
 
 export default {
-  merchants,
-  user,
+  auth,
+  users,
   books,
   me
 };

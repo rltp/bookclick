@@ -3,106 +3,74 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/:start/:end', async (req, res) => {
-  const books = await req.context.models.Book.findAll();
+  const books = await req.context.models.Book.getList( req.params.start, req.params.end );
   return res.send(books);
 });
 
 //get infos from a book (title, author, year...)
 router.get('/:bookId', async (req, res) => {
-  const book = await req.context.models.Book.findByPk(
-    req.params.bookId,
-  );
+  const book = await req.context.models.Book.getInfos( req.params.bookId );
   return res.send(book);
 });
-
-router.post('/', async (req, res) => {
-  const book = await req.context.models.Book.create({
-    text: req.body.text,
-    //
-    userId: req.context.me.id,
-  });
-
-  //s3 upload imager
-
-  return res.send(book);
-});
-
 
 //search bar
 router.post('/search', async (req, res) => {
-  const search = await req.sequelize.query(
-    "SELECT title, authors, publication_year FROM public.Books WHERE title = :title OR authors = :authors) OR tag_name = IN(:tag_name)",
-    {
-      replacements: { 
-        title: title,
-        authors: authors,
-        tag_name: [tag_name]
-      },
-      type: QueryTypes.SELECT
-    });
+  const search = await req.context.models.Book.search( req.body.query );
   return res.send(search)
 }); 
 
-
 //titres similaires
 router.get('/similarity/:bookId', async (req, res) => {
-  const similars = await req.sequelize.query(
-    "SELECT C.book_j, B.title FROM public.Cosim JOIN public.Books ON C.book_i = B.book_id WHERE book_i = :book_i ORDER BY similarity DESC",
-    {
-      replacements: { 
-        book_i: book_i
-      },
-      type: QueryTypes.SELECT
-    });
-
-  return res.send(similars);
+  const similars = await req.context.models.Cosim.similarityTop( req.params.bookId );
 }); 
-
 
 //search by genre (click on a button)
 router.get('/genre', async (req, res) => {
-  const genre = await req.sequelize.query(
-    "SELECT book_id, tag_name FROM public.Books WHERE book_id = :book_id AND tag_name = :genre",
-    {
-      replacements: { 
-        genre: ['Fantastic', 'Polar', 'Historic', 'Thriller', 'Adventure', 'Biography']
-      },
-      type: QueryTypes.SELECT
-    });
-
+  const genre = await req.context.models.Books.getCategories()
   return res.send(genre);
 }); 
 
 //get books by genre
 router.get('/search/:genre', async (req, res) => {
-  const search = await req.sequelize.query(
-    "SELECT title, authors, publication_year FROM public.Books WHERE tag_name = :genre",
-    {
-      replacements: { 
-        genre: ['Fantastic', 'Polar', 'Historic', 'Thriller', 'Adventure', 'Biography']
-      },
-      type: QueryTypes.SELECT
-    });
-
+  const search = await req.context.models.Books.searchByCategory( req.params.genre )
   return res.send(search);
-
 }); 
-
 
 //get bests books (rated by other)
 router.get('/bests', async (req, res) => {
-
-  const bests = await req.sequelize.query("SELECT B.book_id, B.title, B.authors, AVG(R.score) as mean_score FROM public.Books JOIN public.Ratings R ON R.book_id = B.book_id ORDER BY mean_score DESC");
-
+  const bests = await req.context.models.Ratings.bestsBooks()
   return res.send(bests);
 }); 
 
-
 //get most popular books
-router.get('/popular', async (req, res) => {
-  const populars = await req.sequelize.query("SELECT B.book_id, B.title, B.authors, COUNT(R.score) as ratings_count FROM public.Books JOIN public.Ratings R ON R.book_id = B.book_id ORDER BY ratings_count DESC");
-
-  return res.send(populars)
+router.get('/populars', async (req, res) => {
+  const populars = await req.context.models.Ratings.popularsBooks()
+  return res.send(populars);
 }); 
+
+
+//give a rating score + comment (optional)
+router.post('/rate', async (req, res) => {
+  const { book_id, score, comment } = req.body.rating;
+
+  const rating = await req.context.models.Ratings.add(
+    req.context.currentUser,
+    book_id,score,comment
+  );
+  
+  return res.send(edit);
+});
+
+//get the comments of a book
+router.get('/comments/:bookID', async (req, res) => {
+  const comments = await req.context.models.Ratings.getCommentsByID(req.params.bookID)
+  return res.send(comments);
+});
+
+// remove a comment
+router.delete('/comments/:ratingID', async (req, res) => {
+  const deleted = await req.context.models.Ratings.removeCommentFromID( req.context.currentUser, req.params.ratingID);
+  return res.send(deleted);
+});
 
 module.exports = router

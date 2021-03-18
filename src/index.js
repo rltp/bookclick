@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 
@@ -18,18 +17,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(async (req, res, next) => {
-  req.context = {
-    models
-  },
-  next();
+	req.context = { models };
+	next();
 });
 
 // Routes
 
+app.use('/auth', routes.auth)
 app.use('/books', routes.books)
-app.use('/merchants', routes.books)
-app.use('/users', routes.books)
-app.use('/me', routes.books)
+app.use('/users', routes.users)
+app.use('/me', routes.me)
 
 
 // Start
@@ -37,7 +34,7 @@ app.use('/me', routes.books)
 const eraseDatabaseOnSync = false;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-  app.listen(process.env.PORT || 3000, () =>
-    console.log(`Les bonbonnes sont remplies de cocaïne !`),
-  );
+	app.listen(process.env.PORT || 3000, () =>
+		console.log(`Les bonbonnes sont remplies de cocaïne !`),
+	);
 });

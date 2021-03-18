@@ -1,4 +1,7 @@
-const book = (sequelize, DataTypes) => {
+import rating from './Rating'
+import { Op } from "sequelize"
+
+const Book = (sequelize, DataTypes) => {
   const Book = sequelize.define('books', {
     isbn:{
       type: DataTypes.STRING,
@@ -16,12 +19,44 @@ const book = (sequelize, DataTypes) => {
   });
 
   Book.associate = models => {
-    //Book.belongsTo(models.Offer, {foreignKey: 'isbn', targetKey: 'book_id'});
-    Book.hasMany(models.ALS, {foreignKey: 'book_id', sourceKey: 'isbn'});
-    Book.hasMany(models.KMeans, {foreignKey: 'book_id', sourceKey: 'isbn'});
+    Book.hasMany(models.Recommenders.ALS, {foreignKey: 'book_id', sourceKey: 'isbn'});
   };
+
+  Book.getList = async (start, end) => {
+    let limit = Math.abs(end - start)
+    return await Book.findAll({ offset: start, limit: limit });
+  }
+
+  Book.getInfos = async isbn => {
+    return await Book.findOne({ where : { isbn: isbn } })
+  }
+
+  Book.search = async query => {
+    return await Book.findAll({
+      where: {
+        $or: [
+          { 'title': { [Op.iLike]: '%' + query + '%' } },
+          { 'authors': { [Op.iLike]: '%' + query + '%' } },
+          { 'tag_name': { [Op.iLike]: '%' + query + '%' } },
+          { '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
+        ]
+      },
+      include: [{ model: rating }]
+    })
+  }
+
+
+  Book.getCategories = async () => {
+    return await Book
+  }
+
+  Book.searchByCategory = async category => {
+    return await Book.findAll({
+      where: { 'tag_name': { [Op.iLike]: '%' + category + '%' } },
+    })
+  }
 
   return Book;
 };
 
-export default book;
+module.exports = Book;
