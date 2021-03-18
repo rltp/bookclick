@@ -25,8 +25,8 @@ router.get('/similarity/:bookId', async (req, res) => {
 }); 
 
 //search by genre (click on a button)
-router.get('/genre', async (req, res) => {
-  const genre = await req.context.models.Books.getCategories()
+router.get('/genre', (req, res) => {
+  const genre = ['romantic', 'thriller', 'fiction', 'fantastic']
   return res.send(genre);
 }); 
 
@@ -53,7 +53,7 @@ router.get('/populars', async (req, res) => {
 router.post('/rate', async (req, res) => {
   const { book_id, score, comment } = req.body.rating;
 
-  const rating = await req.context.models.Ratings.add(
+  const rating = await req.context.models.Ratings.addRate(
     req.context.currentUser,
     book_id,score,comment
   );
@@ -63,13 +63,13 @@ router.post('/rate', async (req, res) => {
 
 //get the comments of a book
 router.get('/comments/:bookID', async (req, res) => {
-  const comments = await req.context.models.Ratings.getCommentsByID(req.params.bookID)
+  const comments = await req.context.models.Ratings.getCommentsByBookID(req.params.bookID)
   return res.send(comments);
 });
 
 // remove a comment
 router.delete('/comments/:ratingID', async (req, res) => {
-  const deleted = await req.context.models.Ratings.removeCommentFromID( req.context.currentUser, req.params.ratingID);
+  const deleted = await req.context.models.Ratings.removeCommentFromRatingID( req.context.currentUser, req.params.ratingID);
   return res.send(deleted);
 });
 

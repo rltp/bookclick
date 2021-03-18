@@ -4,7 +4,11 @@ const saveAs = (sequelize, DataTypes) => {
 	const saveAs = sequelize.define('saveAs', {
 		user_id: DataTypes.STRING,
 		book_id: DataTypes.STRING,
-		category: DataTypes.STRING
+		category: DataTypes.STRING,
+		createdAt: {
+			type: DataTypes.DATE,
+			defaultValue: sequelize.literal('NOW()')
+		}
 	},{
 		timestamps: false
 	});
@@ -30,8 +34,11 @@ const saveAs = (sequelize, DataTypes) => {
 	};
 
 	saveAs.getPrivateList = async userID => {
-		//"SELECT S.book_id, B.title, B.authors FROM public.SaveAs S JOIN public.Books B ON S.book_id = B.book_id WHERE user_id = :user_id AND S.category = 'to-read' OR S.category = 'favorites' OR S.category = 'owned'",
-		return await saveAs.findAll({ where: { user_id: userID } })
+		return await saveAs.findAll({ 
+			attributes: ['book_id', 'title', 'authors'],
+			where: { user_id: userID },
+			include:[Book]
+		})
 	}
 
 	saveAs.getListGrouped = async (userID, type) => {
@@ -39,7 +46,11 @@ const saveAs = (sequelize, DataTypes) => {
 	}
 
 	saveAs.saveBook = async (userID, type, bookID) => {
-		//"INSERT INTO public.SaveAs (user_id, book_id, category) VALUES (:user_id, :book_id, :category)"
+		return await saveAs.build({
+			user_id: userID,
+			book_id: bookID,
+			category: type
+		})
 	}
 
 	return saveAs;

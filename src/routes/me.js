@@ -50,9 +50,9 @@ router.post('/edit', async (req, res) => {
   const edit = await req.context.models.User.edit(
     req.context.currentUser, 
     {
-      pseudo, firstname, lastname,
-      address, city, postcode, country_code,
-      email, password
+      'pseudo': pseudo, 'firstname': firstname, 'lastname': lastname,
+      'address': address, 'city': city,'postcode': postcode, 'country_code': country_code,
+      'email': email, 'password': password
     }
   );
   return res.send(edit);
