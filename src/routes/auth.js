@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-router.post("/signin", async (req, res) => {
+router.post("/signup", async (req, res) => {
 	const { 
 		pseudo, firstname, lastname,
 		address, city, postcode, country_code,
@@ -36,11 +36,11 @@ router.post("/signin", async (req, res) => {
 
 router.get("logout", (req, res) =>{})
 
-router.post("/singup", async (req, res) => {
-	const { credentials } = req.body;
-	const user = await req.context.models.User.findOne({ email: credentials.email })
+router.post("/signin", async (req, res) => {
+	const { email, password } = req.body;
+	const user = await req.context.models.User.findOne({where: { email: email }})
 
-	if (user && user.isValidPassword(credentials.password))
+	if (user && user.isValidPassword(password))
 		res.json({ user: user.toAuthJSON() });
 	else
 		res.status(400).json({ errors: { global: "Invalid credentials" } });

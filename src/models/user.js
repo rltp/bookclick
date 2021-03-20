@@ -19,7 +19,7 @@ const User = (sequelize, DataTypes) => {
 		email: { type: DataTypes.STRING, unique: true },
 		password: { type: DataTypes.STRING, validate: { notEmpty: true } },
 		confirmed: { type: DataTypes.BOOLEAN, defaultValue: false },
-		confirmationToken: { type: DataTypes.STRING, defaultValue: "" },
+		confirmationToken: { type: DataTypes.STRING, defaultValue: "", allowNull: true },
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.literal('NOW()')

@@ -1,4 +1,5 @@
 import { Op } from "sequelize"
+import models from './index'
 
 const saveAs = (sequelize, DataTypes) => {
 	const saveAs = sequelize.define('saveAs', {
@@ -35,9 +36,13 @@ const saveAs = (sequelize, DataTypes) => {
 
 	saveAs.getPrivateList = async userID => {
 		return await saveAs.findAll({ 
-			attributes: ['book_id', 'title', 'authors'],
+			attributes: ['category'],
 			where: { user_id: userID },
-			include:[Book]
+			include:[{
+				model: models.Book,
+				attributes: ['isbn', 'title','authors']
+			}],
+			exclude: ['id']
 		})
 	}
 
