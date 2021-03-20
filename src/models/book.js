@@ -1,5 +1,5 @@
-import rating from './Rating'
-import { Op } from "sequelize"
+import models from './index';
+import { Op } from "sequelize";
 
 const Book = (sequelize, DataTypes) => {
 	const Book = sequelize.define('books', {
@@ -41,7 +41,7 @@ const Book = (sequelize, DataTypes) => {
 					{ '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
 				]
 			},
-			include: [{ model: rating }]
+			include: [{ model: models.rating }]
 		})
 	}
 

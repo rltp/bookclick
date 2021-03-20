@@ -1,4 +1,5 @@
-import { DataTypes } from "sequelize"
+import models from './index';
+
 import uuid from 'uuid';
 
 const Rating = (sequelize, DataTypes) => {
@@ -55,7 +56,7 @@ const Rating = (sequelize, DataTypes) => {
         return await saveAs.findAll({
             attributes: ['user_id', 'pseudo', 'comment', 'createdAt'],
             where: { book_id: bookID, comment: {[Op.ne]: ''} },
-            include: [User],
+            include: [models.User],
             order:[['createdAt', 'DESC']]
         })
     }

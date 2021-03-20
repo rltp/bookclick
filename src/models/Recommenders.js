@@ -1,3 +1,5 @@
+import models from './index'
+
 const Recommenders = (sequelize, DataTypes) => {
   const ALS = sequelize.define('als', {
       user_id: DataTypes.STRING,
@@ -28,7 +30,7 @@ const Recommenders = (sequelize, DataTypes) => {
       {
         attributes: ['book_j', 'title', 'authors'],
         where: { book_i: bookID },
-        include: [Book],
+        include: [models.Book],
         order: [ ['similarity', 'DESC']],
         limit: 5
       }
@@ -41,7 +43,7 @@ const Recommenders = (sequelize, DataTypes) => {
       {
         attributes: ['book_id', 'title', 'authors', 'prediction'],
         where: { user_id: userID },
-        include: [Book],
+        include: [models.Book],
         order: [['prediction', 'DESC']],
         limit: 10
       }
@@ -54,7 +56,7 @@ const Recommenders = (sequelize, DataTypes) => {
       {
         attributes: ['book_id', 'title', 'authors', 'prediction'],
         where: { user_id: userID, book_id: bookID },
-        include: [Book],
+        include: [models.Book],
         order: [['prediction', 'DESC']],
         limit: 10
       }
