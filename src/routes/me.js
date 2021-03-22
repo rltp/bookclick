@@ -10,6 +10,24 @@ router.get('/', async (req, res) => {
   return res.send(user);
 });
 
+//give a rating score + comment (optional)
+router.post('/rate', async (req, res) => {
+  const { book_id, score, comment } = req.body.rating;
+
+  const rating = await req.context.models.Rating.addRate(
+    req.context.currentUser,
+    book_id,score,comment
+  );
+  
+  return res.send(rating);
+});
+
+// remove a comment
+router.delete('/comments/:ratingID', async (req, res) => {
+  const deleted = await req.context.models.Rating.removeCommentFromRatingID( req.context.currentUser, req.params.ratingID);
+  return res.send(deleted);
+});
+
 //return all higher book from colaborative filtering
 router.get('/colab', async (req, res) => {
   const predictions = await req.context.models.ALS.colaborativeTop(req.context.currentUser);
@@ -29,13 +47,13 @@ router.get('/library', async (req, res) => {
 });
 
 // Get books group by type
-router.get('/librairy/groupby/:type', async (req, res) => {
+router.get('/library/groupby/:type', async (req, res) => {
   const prediction = await req.context.models.saveAs.getListGrouped(req.context.currentUser, req.params.type);
   return res.send(prediction);
 });
 
 //save as favorites, to-read...
-router.post('/librairy/save', async (req, res) => {
+router.post('/library/save', async (req, res) => {
   const saved = await req.context.models.saveAs.saveBook(req.context.currentUser, req.body.type, req.body.bookID);
   return res.send(saved);
 });

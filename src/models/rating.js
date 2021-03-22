@@ -1,5 +1,5 @@
 import models from './index';
-
+import { Op } from "sequelize";
 import uuid from 'uuid';
 
 const Rating = (sequelize, DataTypes) => {
@@ -53,14 +53,14 @@ const Rating = (sequelize, DataTypes) => {
             book_id: bookID,
             score: score, 
             comment: comment
-        })
+        }).save()
     }
 
     Rating.getCommentsByBookID =  async (bookID) =>{
-        return await saveAs.findAll({
-            attributes: ['user_id', 'pseudo', 'comment', 'createdAt'],
+        return await Rating.findAll({
+            attributes: ['user_id', 'user.pseudo', 'comment', 'createdAt'],
             where: { book_id: bookID, comment: {[Op.ne]: ''} },
-            include: [models.User],
+            include: [{model: models.User, attributes: ['pseudo']}],
             order:[['createdAt', 'DESC']]
         })
     }

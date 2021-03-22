@@ -51,7 +51,15 @@ const saveAs = (sequelize, DataTypes) => {
 	}
 
 	saveAs.getListGrouped = async (userID, type) => {
-		//"SELECT B.book_id, B.title, COUNT(B.authors) as Occur_authors FROM public.Books B JOIN public.Ratings R ON B.book_id = R.book_id GROUP BY B.authors HAVING Occur_authors > 2 ORDER BY Occur_athors DESC"
+		return await saveAs.findAll({ 
+			attributes: ['category'],
+			where: { user_id: userID, category: type},
+			include:[{
+				model: models.Book,
+				attributes: ['isbn', 'title','authors']
+			}],
+			exclude: ['id']
+		})
 	}
 
 	saveAs.saveBook = async (userID, type, bookID) => {
@@ -59,7 +67,7 @@ const saveAs = (sequelize, DataTypes) => {
 			user_id: userID,
 			book_id: bookID,
 			category: type
-		})
+		}).save()
 	}
 
 	return saveAs;

@@ -48,28 +48,11 @@ router.get('/populars', async (req, res) => {
   return res.send(populars);
 }); 
 
-//give a rating score + comment (optional)
-router.post('/rate', async (req, res) => {
-  const { book_id, score, comment } = req.body.rating;
-
-  const rating = await req.context.models.Ratings.addRate(
-    req.context.currentUser,
-    book_id,score,comment
-  );
-  
-  return res.send(edit);
-});
 
 //get the comments of a book
 router.get('/comments/:bookID', async (req, res) => {
-  const comments = await req.context.models.Ratings.getCommentsByBookID(req.params.bookID)
+  const comments = await req.context.models.Rating.getCommentsByBookID(req.params.bookID)
   return res.send(comments);
-});
-
-// remove a comment
-router.delete('/comments/:ratingID', async (req, res) => {
-  const deleted = await req.context.models.Ratings.removeCommentFromRatingID( req.context.currentUser, req.params.ratingID);
-  return res.send(deleted);
 });
 
 module.exports = router
