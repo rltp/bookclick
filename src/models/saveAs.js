@@ -29,7 +29,11 @@ const saveAs = (sequelize, DataTypes) => {
 						{ category: 'favorites' },
 						{ category: 'owned' }
 					]
-				}
+				},
+				include:[{
+					model: models.Book,
+					attributes: ['isbn', 'title','authors']
+				}],
 			}
 		)
 	};

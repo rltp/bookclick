@@ -20,6 +20,7 @@ const Book = (sequelize, DataTypes) => {
 
 	Book.associate = models => {
 		Book.hasMany(models.Recommenders.ALS, { foreignKey: 'book_id', sourceKey: 'isbn' });
+		Book.hasMany(models.Rating, { foreignKey: 'book_id', sourceKey: 'isbn' });
 	};
 
 	Book.getList = async (start, end) => {
@@ -34,14 +35,14 @@ const Book = (sequelize, DataTypes) => {
 	Book.search = async query => {
 		return await Book.findAll({
 			where: {
-				$or: [
+				[Op.or]: [
 					{ 'title': { [Op.iLike]: '%' + query + '%' } },
-					{ 'authors': { [Op.iLike]: '%' + query + '%' } },
-					{ 'tag_name': { [Op.iLike]: '%' + query + '%' } },
-					{ '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
+					{ 'authors': { [Op.iLike]: '%' + query + '%' } }
+					//{ '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
 				]
 			},
-			include: [{ model: models.rating }]
+			group:['books.isbn']
+			//include: [{ model: models.Rating , attributes: ['comment']}]
 		})
 	}
 

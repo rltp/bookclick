@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.get('/:start/:end', async (req, res) => {
+router.get('/list/:start/:end', async (req, res) => {
   const books = await req.context.models.Book.getList( req.params.start, req.params.end );
   return res.send(books);
 });
@@ -32,7 +32,7 @@ router.get('/genre', (req, res) => {
 
 //get books by genre
 router.get('/search/:genre', async (req, res) => {
-  const search = await req.context.models.Books.searchByCategory( req.params.genre )
+  const search = await req.context.models.Book.searchByCategory( req.params.genre )
   return res.send(search);
 }); 
 

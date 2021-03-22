@@ -39,9 +39,11 @@ const Rating = (sequelize, DataTypes) => {
 
     Rating.popularsBooks = async () => {
         return await Rating.findAll({
-            attributes: ['book_id', [sequelize.fn('COUNT', sequelize.col('score')), 'ratingCount']],
-            group: ['book_id'],
-            order: [[sequelize.fn('COUNT', sequelize.col('score')), 'DESC']]
+            attributes: ['book_id', [sequelize.fn('COUNT', sequelize.col('ratings.score')), 'ratingCount']],
+            group: ['ratings.book_id', 'book.isbn'],
+            order: [[sequelize.fn('COUNT', sequelize.col('ratings.score')), 'DESC']],
+            include: [{ model: models.Book, attributes: ['title', 'authors']}],
+            limit: 10
         })
     }
   
