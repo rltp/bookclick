@@ -30,9 +30,10 @@ const Rating = (sequelize, DataTypes) => {
     Rating.bestsBooks = async () => {
         return await Rating.findAll({
             attributes: ['book_id', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'ratingAvg']],
+            where: { '$book.publication_year$': { [Op.gte]: 2015} },
             group: ['ratings.book_id', 'book.isbn'],
             order: [[sequelize.fn('AVG', sequelize.col('ratings.score')), 'DESC']],
-            include: [{ model: models.Book, attributes: ['title', 'authors']}],
+            include: [{ model: models.Book, attributes: ['title', 'authors', 'image_url']}],
             limit: 10
         })
     }
@@ -40,9 +41,10 @@ const Rating = (sequelize, DataTypes) => {
     Rating.popularsBooks = async () => {
         return await Rating.findAll({
             attributes: ['book_id', [sequelize.fn('COUNT', sequelize.col('ratings.score')), 'ratingCount']],
+            where: { '$book.publication_year$': { [Op.gte]: 2015} },
             group: ['ratings.book_id', 'book.isbn'],
             order: [[sequelize.fn('COUNT', sequelize.col('ratings.score')), 'DESC']],
-            include: [{ model: models.Book, attributes: ['title', 'authors']}],
+            include: [{ model: models.Book, attributes: ['title', 'authors', 'image_url']}],
             limit: 10
         })
     }
