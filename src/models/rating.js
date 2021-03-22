@@ -27,19 +27,21 @@ const Rating = (sequelize, DataTypes) => {
         Rating.belongsTo(models.Book, {foreignKey: 'book_id'});
     };
 
-    Rating.bestBooks = async () => {
-        return Rating.findAll({
-            attributes: ['book_id', [models.sequelize.fn('AVG', sequelize.col('score')), 'ratingAvg']],
-            group: ['book_id'],
-            order: [[models.sequelize.fn('AVG', models.sequelize.col('score')), 'DESC']]
+    Rating.bestsBooks = async () => {
+        return await Rating.findAll({
+            attributes: ['book_id', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'ratingAvg']],
+            group: ['ratings.book_id', 'book.isbn'],
+            order: [[sequelize.fn('AVG', sequelize.col('ratings.score')), 'DESC']],
+            include: [{ model: models.Book, attributes: ['title', 'authors']}],
+            limit: 10
         })
     }
 
-    Rating.popularBooks = async () => {
-        return Rating.findAll({
-            attributes: ['book_id', [models.sequelize.fn('COUNT', sequelize.col('score')), 'ratingAvg']],
+    Rating.popularsBooks = async () => {
+        return await Rating.findAll({
+            attributes: ['book_id', [sequelize.fn('COUNT', sequelize.col('score')), 'ratingCount']],
             group: ['book_id'],
-            order: [[models.sequelize.fn('COUNT', models.sequelize.col('score')), 'DESC']]
+            order: [[sequelize.fn('COUNT', sequelize.col('score')), 'DESC']]
         })
     }
   

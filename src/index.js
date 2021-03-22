@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import { sanitizeBody } from 'express-validator'
+import { body } from 'express-validator'
 import models, { sequelize } from './models';
 import routes from './routes';
 import dotenv from 'dotenv'
@@ -15,7 +15,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(sanitizeBody('*').escape())
+//app.use(body('*').escape())
 
 app.use(async (req, res, next) => {
 	req.context = { models };

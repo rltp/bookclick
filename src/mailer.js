@@ -7,7 +7,9 @@ function setup() {
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
     pool: true,
-    secure: true,
+    tls: {
+      rejectUnauthorized: false
+    },
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS

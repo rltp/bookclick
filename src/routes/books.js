@@ -8,7 +8,7 @@ router.get('/:start/:end', async (req, res) => {
 });
 
 //get infos from a book (title, author, year...)
-router.get('/:bookId', async (req, res) => {
+router.get('/details/:bookId', async (req, res) => {
   const book = await req.context.models.Book.getInfos( req.params.bookId );
   return res.send(book);
 });
@@ -38,16 +38,15 @@ router.get('/search/:genre', async (req, res) => {
 
 //get bests books (rated by other)
 router.get('/bests', async (req, res) => {
-  const bests = await req.context.models.Ratings.bestsBooks()
+  const bests = await req.context.models.Rating.bestsBooks()
   return res.send(bests);
 }); 
 
 //get most popular books
 router.get('/populars', async (req, res) => {
-  const populars = await req.context.models.Ratings.popularsBooks()
+  const populars = await req.context.models.Rating.popularsBooks()
   return res.send(populars);
 }); 
-
 
 //give a rating score + comment (optional)
 router.post('/rate', async (req, res) => {

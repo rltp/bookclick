@@ -9,9 +9,9 @@ router.post("/signup", async (req, res) => {
 		pseudo, firstname, lastname,
 		address, city, postcode, country_code,
 		email, password
-	} = req.body;
+	} = req.body.user;
 	console.log(req.body)
-		
+	
 	const user = await req.context.models.User.build({
 		'pseudo': pseudo,
 		'firstname' : firstname,
@@ -34,10 +34,10 @@ router.post("/signup", async (req, res) => {
 	}
 });
 
-router.get("logout", (req, res) =>{})
-
 router.post("/signin", async (req, res) => {
-	const { email, password } = req.body;
+	console.log(req.body.credentials)
+	const { email, password } = req.body.credentials;
+	
 	const user = await req.context.models.User.findOne({where: { email: email }})
 
 	if (user && user.isValidPassword(password))
