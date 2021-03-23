@@ -1,19 +1,24 @@
-import models from './index'
+import models from './index';
 
 const Recommenders = (sequelize, DataTypes) => {
   const ALS = sequelize.define('als', {
       user_id: DataTypes.STRING,
       book_id: DataTypes.STRING,
-      prediction: DataTypes.DECIMAL(2)
+      prediction: DataTypes.DECIMAL(3,2)
   },
   {
     timestamps: false
   });
 
+  ALS.associate = models => {
+    ALS.belongsTo(models.User, {foreignKey: 'user_id'});
+    ALS.belongsTo(models.Book, {foreignKey: 'book_id'});
+  }
+
   const Cosim = sequelize.define('cosim', {
       book_i: DataTypes.STRING,
       book_j: DataTypes.STRING,
-      similarity: DataTypes.DECIMAL(2)
+      similarity: DataTypes.DECIMAL(3,2)
     },
     {
       timestamps: false
@@ -30,7 +35,7 @@ const Recommenders = (sequelize, DataTypes) => {
       {
         attributes: ['book_j', 'title', 'authors'],
         where: { book_i: bookID },
-        include: [models.Book],
+        include: [{model: models.Book}],
         order: [ ['similarity', 'DESC']],
         limit: 5
       }
@@ -41,10 +46,11 @@ const Recommenders = (sequelize, DataTypes) => {
     //"SELECT A.book_id, B.title, A.prediction FROM public.ALs JOIN public.Books B ON A.book_id = B.book_id WHERE user_id = :user_id ORDER BY prediction DESC"
     return await ALS.findAll(
       {
-        attributes: ['book_id', 'title', 'authors', 'prediction'],
+        
+        attributes: ['book_id', 'prediction'],
         where: { user_id: userID },
-        include: [models.Book],
         order: [['prediction', 'DESC']],
+        include: [{ model: models.Book, attributes: ['title', 'authors', 'image_url']}],
         limit: 10
       }
     )

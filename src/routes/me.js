@@ -30,13 +30,13 @@ router.delete('/comments/:ratingID', async (req, res) => {
 
 //return all higher book from colaborative filtering
 router.get('/colab', async (req, res) => {
-  const predictions = await req.context.models.ALS.colaborativeTop(req.context.currentUser);
+  const predictions = await req.context.models.Recommenders.ALS.colaborativeTop(req.context.currentUser);
   return res.send(predictions);
 });  
 
 //get pourcent of recommandation for the connected user with als
 router.get('/colab/:bookId', async (req, res) => {
-  const prediction = await req.context.models.ALS.colaborativeScore(req.context.currentUser, req.params.bookID);
+  const prediction = await req.context.models.Recommenders.ALS.colaborativeScore(req.context.currentUser, req.params.bookID);
   return res.send(prediction);
 }); 
 

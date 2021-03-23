@@ -34,7 +34,7 @@ app.use('/me', routes.me)
 
 const eraseDatabaseOnSync = false;
 
-sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+sequelize.sync({ force: eraseDatabaseOnSync, logging: console.log() }).then(async () => {
 	app.listen(process.env.PORT || 5000, () =>
 		console.log(`Les bonbonnes sont remplies de cocaïne !`),
 	);

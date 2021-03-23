@@ -19,7 +19,7 @@ const Book = (sequelize, DataTypes) => {
 		});
 
 	Book.associate = models => {
-		Book.hasMany(models.Recommenders.ALS, { foreignKey: 'book_id', sourceKey: 'isbn' });
+		Book.hasMany(models.Recommenders.ALS, { foreignKey: 'book_id', sourceKey: 'isbn'});
 		Book.hasMany(models.Rating, { foreignKey: 'book_id', sourceKey: 'isbn' });
 	};
 
@@ -29,7 +29,12 @@ const Book = (sequelize, DataTypes) => {
 	}
 
 	Book.getInfos = async isbn => {
-		return await Book.findOne({ where: { isbn: isbn } })
+		return await Book.findOne({
+			attributes: ['isbn', 'title', 'authors', 'publication_year', 'language_code', 'image_url', 'tag_name', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
+            where: { isbn: isbn },
+            group: ['isbn'],
+            include: [{model: models.Rating, attributes: []}]
+		})
 	}
 
 	Book.search = async query => {
