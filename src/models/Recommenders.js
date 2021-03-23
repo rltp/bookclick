@@ -71,7 +71,20 @@ const Recommenders = (sequelize, DataTypes) => {
   }
 
   ALS.colaborativeScore = async (userID, bookID) => {
-    //"SELECT A.book_id, B.title, A.prediction FROM public.ALs JOIN public.Books B ON A.book_id = B.book_id WHERE user_id = 55 AND book_id = 55",
+
+    return await sequelize.query(
+      `SELECT "prediction"
+      FROM "als" AS "als" 
+      LEFT OUTER JOIN "books" AS "book" 
+      ON "als"."book_id" = "book"."isbn" 
+      WHERE "als"."user_id" = :user_id  AND "als"."book_id" = :book_id
+      ORDER BY "als"."prediction" DESC LIMIT 10;`,
+      {
+        replacements: { user_id: userID, book_id: bookID },
+        type: QueryTypes.SELECT
+      }
+    );
+
     return await ALS.findOne(
       {
         attributes: ['book_id', 'title', 'authors', 'prediction'],

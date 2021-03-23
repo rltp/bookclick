@@ -35,7 +35,7 @@ router.get('/colab', async (req, res) => {
 });  
 
 //get pourcent of recommandation for the connected user with als
-router.get('/colab/:bookId', async (req, res) => {
+router.get('/colab/:bookID', async (req, res) => {
   const prediction = await req.context.models.Recommenders.ALS.colaborativeScore(req.context.currentUser, req.params.bookID);
   return res.send(prediction);
 }); 
