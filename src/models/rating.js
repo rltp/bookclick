@@ -30,7 +30,7 @@ const Rating = (sequelize, DataTypes) => {
 
     Rating.getAverage = async (bookID) => {
         return await Rating.findAll({
-            attributes: [[sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
+            attributes: [[sequelize.fn('AVG', sequelize.col('ratings.score')), 'score'], [sequelize.fn('COUNT', sequelize.col('ratings.score')), 'count']],
             where: { book_id: bookID},
             raw: true
         })
