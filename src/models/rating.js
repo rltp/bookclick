@@ -1,5 +1,5 @@
 import models from './index';
-import { Op } from "sequelize";
+
 import uuid from 'uuid';
 
 const Rating = (sequelize, DataTypes) => {
@@ -29,25 +29,19 @@ const Rating = (sequelize, DataTypes) => {
 
     Rating.bestsBooks = async () => {
         return await Rating.findAll({
-            attributes: ['book_id', 'title', 'authors', 'image_url', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
-            where: { '$book.publication_year$': { [Op.gte]: 2015} },
+            attributes: ['book_id', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'ratingAvg']],
             group: ['ratings.book_id', 'book.isbn'],
             order: [[sequelize.fn('AVG', sequelize.col('ratings.score')), 'DESC']],
-            include: [{ model: models.Book, attributes: ['title', 'authors', 'image_url']}],
-            limit: 10,
-            raw: true
+            include: [{ model: models.Book, attributes: ['title', 'authors']}],
+            limit: 10
         })
     }
 
     Rating.popularsBooks = async () => {
         return await Rating.findAll({
-            attributes: ['book_id', 'title', 'authors', 'image_url', [sequelize.fn('COUNT', sequelize.col('ratings.score')), 'count']],
-            where: { '$book.publication_year$': { [Op.gte]: 2015} },
-            group: ['ratings.book_id', 'book.isbn'],
-            order: [[sequelize.fn('COUNT', sequelize.col('ratings.score')), 'DESC']],
-            include: [{ model: models.Book, attributes: []}],
-            limit: 10,
-            raw: true
+            attributes: ['book_id', [sequelize.fn('COUNT', sequelize.col('score')), 'ratingCount']],
+            group: ['book_id'],
+            order: [[sequelize.fn('COUNT', sequelize.col('score')), 'DESC']]
         })
     }
   
@@ -57,14 +51,14 @@ const Rating = (sequelize, DataTypes) => {
             book_id: bookID,
             score: score, 
             comment: comment
-        }).save()
+        })
     }
 
     Rating.getCommentsByBookID =  async (bookID) =>{
-        return await Rating.findAll({
-            attributes: ['user_id', 'user.pseudo', 'comment', 'createdAt'],
+        return await saveAs.findAll({
+            attributes: ['user_id', 'pseudo', 'comment', 'createdAt'],
             where: { book_id: bookID, comment: {[Op.ne]: ''} },
-            include: [{model: models.User, attributes: ['pseudo']}],
+            include: [models.User],
             order:[['createdAt', 'DESC']]
         })
     }
