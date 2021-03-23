@@ -19,8 +19,7 @@ const Book = (sequelize, DataTypes) => {
 		});
 
 	Book.associate = models => {
-		Book.hasMany(models.Recommenders.ALS, { foreignKey: 'book_id', sourceKey: 'isbn'});
-		Book.hasMany(models.Rating, { foreignKey: 'book_id', sourceKey: 'isbn' });
+		Book.hasMany(models.Recommenders.ALS, { foreignKey: 'book_id', sourceKey: 'isbn' });
 	};
 
 	Book.getList = async (start, end) => {
@@ -29,25 +28,20 @@ const Book = (sequelize, DataTypes) => {
 	}
 
 	Book.getInfos = async isbn => {
-		return await Book.findOne({
-			attributes: ['isbn', 'title', 'authors', 'publication_year', 'language_code', 'image_url', 'tag_name', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
-            where: { isbn: isbn },
-            group: ['isbn'],
-            include: [{model: models.Rating, attributes: []}]
-		})
+		return await Book.findOne({ where: { isbn: isbn } })
 	}
 
 	Book.search = async query => {
 		return await Book.findAll({
 			where: {
-				[Op.or]: [
+				$or: [
 					{ 'title': { [Op.iLike]: '%' + query + '%' } },
-					{ 'authors': { [Op.iLike]: '%' + query + '%' } }
-					//{ '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
+					{ 'authors': { [Op.iLike]: '%' + query + '%' } },
+					{ 'tag_name': { [Op.iLike]: '%' + query + '%' } },
+					{ '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
 				]
 			},
-			group:['books.isbn']
-			//include: [{ model: models.Rating , attributes: ['comment']}]
+			include: [{ model: models.rating }]
 		})
 	}
 
