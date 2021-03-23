@@ -36,6 +36,12 @@ router.get('/search/:genre', async (req, res) => {
   return res.send(search);
 }); 
 
+//get average score for a book
+router.get('/avg/:bookID', async (req, res) => {
+  const avg = await req.context.models.Rating.getAverage(req.params.bookID)
+  return res.send(avg);
+}); 
+
 //get bests books (rated by other)
 router.get('/bests', async (req, res) => {
   const bests = await req.context.models.Rating.bestsBooks()

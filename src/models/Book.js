@@ -30,10 +30,9 @@ const Book = (sequelize, DataTypes) => {
 
 	Book.getInfos = async isbn => {
 		return await Book.findOne({
-			attributes: ['isbn', 'title', 'authors', 'publication_year', 'language_code', 'image_url', 'tag_name', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
+			attributes: ['isbn', 'title', 'authors', 'publication_year', 'language_code', 'image_url', 'tag_name'],
             where: { isbn: isbn },
-            group: ['isbn'],
-            include: [{model: models.Rating, attributes: []}]
+            group: ['isbn']
 		})
 	}
 

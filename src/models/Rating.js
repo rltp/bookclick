@@ -27,6 +27,15 @@ const Rating = (sequelize, DataTypes) => {
         Rating.belongsTo(models.Book, {foreignKey: 'book_id'});
     };
 
+
+    Rating.getAverage = async (bookID) => {
+        return await Rating.findAll({
+            attributes: [[sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
+            where: { book_id: bookID},
+            raw: true
+        })
+    }
+
     Rating.bestsBooks = async () => {
         return await Rating.findAll({
             attributes: ['book.isbn', 'book.title', 'book.authors', 'book.image_url', [sequelize.fn('AVG', sequelize.col('ratings.score')), 'score']],
