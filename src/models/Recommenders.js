@@ -46,7 +46,7 @@ const Recommenders = (sequelize, DataTypes) => {
   ALS.colaborativeTop = async (userID) =>{
 
     return await sequelize.query(
-      `SELECT "isbn", "prediction", "title", "publication_year", "authors" 
+      `SELECT "isbn", "prediction", "title", "publication_year", "authors" , "image_url"
       FROM "als" AS "als" 
       LEFT OUTER JOIN "books" AS "book" 
       ON "als"."book_id" = "book"."isbn" 
