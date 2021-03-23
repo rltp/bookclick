@@ -30,6 +30,7 @@ router.post("/signup", async (req, res) => {
 		sendConfirmationEmail(saved);
 		res.status(200).json({ user: saved.toAuthJSON() });
 	}catch( err ){
+		console.log(err)
 		res.status(400).json({ errors: err });
 	}
 });

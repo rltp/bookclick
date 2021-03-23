@@ -52,8 +52,6 @@ const User = (sequelize, DataTypes) => {
 			{
 				email: this.email,
 				firstname: this.firstname,
-				lastname: this.lastname,
-				pseudo: this.pseudo,
 				confirmed: this.confirmed
 			},
 			process.env.JWT_SECRET
@@ -72,8 +70,6 @@ const User = (sequelize, DataTypes) => {
 		return {
 			email: this.email,
 			firstname: this.firstname,
-			lastname: this.lastname,
-			pseudo: this.pseudo,
 			confirmed: this.confirmed,
 			token: this.generateJWT()
 		};

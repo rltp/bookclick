@@ -1,4 +1,5 @@
 import models from './index';
+import {QueryTypes} from 'sequelize';
 
 const Recommenders = (sequelize, DataTypes) => {
   const ALS = sequelize.define('als', {
@@ -43,7 +44,20 @@ const Recommenders = (sequelize, DataTypes) => {
   }
 
   ALS.colaborativeTop = async (userID) =>{
-    //"SELECT A.book_id, B.title, A.prediction FROM public.ALs JOIN public.Books B ON A.book_id = B.book_id WHERE user_id = :user_id ORDER BY prediction DESC"
+
+    return await sequelize.query(
+      `SELECT "isbn", "prediction", "title", "publication_year", "authors" 
+      FROM "als" AS "als" 
+      LEFT OUTER JOIN "books" AS "book" 
+      ON "als"."book_id" = "book"."isbn" 
+      WHERE "als"."user_id" = :user_id 
+      ORDER BY "als"."prediction" DESC LIMIT 10;`,
+      {
+        replacements: { user_id: userID },
+        type: QueryTypes.SELECT
+      }
+    );
+
     return await ALS.findAll(
       {
         
