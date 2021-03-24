@@ -20,6 +20,7 @@ const Book = (sequelize, DataTypes) => {
 
 	Book.associate = models => {
 		Book.hasMany(models.Recommenders.ALS, { foreignKey: 'book_id', sourceKey: 'isbn'});
+		Book.hasMany(models.Recommenders.Cosim, { foreignKey: 'book_i', sourceKey: 'isbn'});
 		Book.hasMany(models.Rating, { foreignKey: 'book_id', sourceKey: 'isbn' });
 	};
 

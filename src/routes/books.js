@@ -20,8 +20,8 @@ router.post('/search', async (req, res) => {
 }); 
 
 //titres similaires
-router.get('/similarity/:bookId', async (req, res) => {
-  const similars = await req.context.models.Cosim.similarityTop( req.params.bookId );
+router.get('/similarity/:bookID', async (req, res) => {
+  const similars = await req.context.models.Recommenders.Cosim.similarityTop( req.params.bookID );
 }); 
 
 //search by genre (click on a button)
