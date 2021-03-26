@@ -15,13 +15,16 @@ router.get('/details/:bookId', async (req, res) => {
 
 //search bar
 router.post('/search', async (req, res) => {
+  console.log(req.body)
   const search = await req.context.models.Book.search( req.body.query );
+  console.log(search);
   return res.send(search)
 }); 
 
 //titres similaires
 router.get('/similarity/:bookID', async (req, res) => {
   const similars = await req.context.models.Recommenders.Cosim.similarityTop( req.params.bookID );
+  return res.send(similars)
 }); 
 
 //search by genre (click on a button)

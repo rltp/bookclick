@@ -46,7 +46,8 @@ const Book = (sequelize, DataTypes) => {
 					//{ '$ratings.comment$': { [Op.iLike]: '%' + query + '%' } }
 				]
 			},
-			group:['books.isbn']
+			group:['books.isbn'],
+			limit: 240
 			//include: [{ model: models.Rating , attributes: ['comment']}]
 		})
 	}

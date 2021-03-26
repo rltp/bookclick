@@ -32,12 +32,12 @@ const Recommenders = (sequelize, DataTypes) => {
 
   Cosim.similarityTop = async (bookID) =>{
     return await sequelize.query(
-      `SELECT "similarity", "title", "publication_year", "authors" , "image_url"
+      `SELECT "isbn", "similarity", "title", "publication_year", "authors" , "image_url"
       FROM "cosims" AS "cosim" 
       LEFT OUTER JOIN "books" AS "book" 
       ON "cosim"."book_j" = "book"."isbn" 
       WHERE "cosim"."book_i" = :book_id 
-      ORDER BY "cosim"."similarity" DESC;`,
+      ORDER BY "cosim"."similarity" DESC LIMIT 8;`,
       {
         replacements: { book_id: bookID },
         type: QueryTypes.SELECT
