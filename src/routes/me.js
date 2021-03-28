@@ -12,13 +12,13 @@ router.get('/', async (req, res) => {
 
 //give a rating score + comment (optional)
 router.post('/rate', async (req, res) => {
-  const { book_id, score, comment } = req.body.rating;
-
-  const rating = await req.context.models.Rating.addRate(
-    req.context.currentUser,
-    book_id,score,comment
-  );
-  
+  const rating = await req.body.rating.map( async(rate) =>{
+    const { book_id, score, comment } = rate;
+    return await req.context.models.Rating.addRate(
+      req.context.currentUser,
+      book_id, score, comment
+    );
+  })
   return res.send(rating);
 });
 
