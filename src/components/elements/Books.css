@@ -1,0 +1,26 @@
+.row {
+  margin-left: 20px;
+  color: #0e0e0e;
+}
+.control{
+    display: flex;
+    justify-content: center;
+}
+.ui.dimmer .ui.workaround{
+    color: #0e0e0e !important;
+}
+.ui.dimmer .ui.workaround.loader:before {
+  border-color: rgba(0,0,0,.1);
+}
+          
+.ui.dimmer .ui.workaround.loader:after {
+  border-color: #767676 transparent transparent;
+}
+.ui.modal>.content>.description{
+    flex: auto !important;
+}
+.bookReviews{
+    text-align: left;
+    background: #fff;
+    padding: 15px;
+}
