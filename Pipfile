@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3.7"
+
+[dev-packages.pipeline]
+editable = true
+extras = [ "dev",]
+path = "."
+
+[packages.pipeline]
+editable = true
+path = "."
+
+[packages.e1839a8]
+path = "."
+editable = true
