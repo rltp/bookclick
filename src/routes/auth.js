@@ -61,7 +61,8 @@ router.post("/confirmation", async (req, res) => {
 });
 
 router.post("/reset_password_request", async (req, res) => {
-	const user = await req.context.models.User.findOne({ email: req.body.email })
+	const user = await req.context.models.User.findOne({ where: { email: req.body.email} })
+	console.log(req.body, user)
 	if (user) {
 		sendResetPasswordEmail(user);
 		res.json({});

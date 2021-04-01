@@ -40,5 +40,9 @@ export function sendResetPasswordEmail(user) {
     ${user.generateResetPasswordLink()}
     `
   };
-  transport.sendMail(email);
+
+  console.log("email sent")
+  transport.sendMail(email).then((log) => {
+    console.log("[email]", log)
+  });
 }

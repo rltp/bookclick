@@ -19,7 +19,7 @@ const Rating = (sequelize, DataTypes) => {
         }
     },
     {
-      timestamps: false
+        timestamps: false
     });
   
     Rating.associate = models => {
@@ -61,20 +61,24 @@ const Rating = (sequelize, DataTypes) => {
     }
   
     Rating.addRate = async (userID, bookID, score, comment) => {
-        return await Rating.build({
-            user_id: userID,
-            book_id: bookID,
-            score: score, 
-            comment: comment
-        }).save()
+        return await Rating
+        .findOne({ where: { book_id: bookID, user_id: userID } })
+        .then( async (obj) => {
+            if (obj) return obj.update({ score: score, comment: comment });
+            return await Rating.create({
+                user_id: userID, book_id: bookID,
+                score: score, comment: comment
+            });
+        });
     }
 
     Rating.getCommentsByBookID =  async (bookID) =>{
         return await Rating.findAll({
-            attributes: ['user_id', 'user.pseudo', 'comment', 'createdAt'],
+            attributes: ['user_id', 'user.pseudo', 'score', 'comment', 'createdAt'],
             where: { book_id: bookID, comment: {[Op.ne]: ''} },
             include: [{model: models.User, attributes: ['pseudo']}],
-            order:[['createdAt', 'DESC']]
+            order:[['createdAt', 'DESC']],
+            raw: true
         })
     }
 
