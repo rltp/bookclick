@@ -17,7 +17,7 @@ def run(sc, environment):
 
     context.log("INFO", "Saving ratings data...")
     
-    items = books_file.withColumn("tag_array", psf.split(psf.regexp_replace("tag_name", " ", ""), ','))
+    items = books.withColumn("tag_array", psf.split(psf.regexp_replace("tag_name", " ", ""), ','))
 
     hashingTF = HashingTF(inputCol="tag_array", outputCol="tf")
 
@@ -31,10 +31,10 @@ def run(sc, environment):
 
     dot_udf = psf.udf(lambda x, y: float(sum(x * DenseVector(y)[3])), DoubleType())
 
-    computed = data.alias("i").join(data.alias("j"), psf.col("i.book_id") < psf.col("j.book_id"))\
+    computed = data.alias("i").join(data.alias("j"), psf.col("i.isbn") < psf.col("j.isbn"))\
         .select(
-            psf.col("i.book_id").alias("i"),
-            psf.col("j.book_id").alias("j"),
+            psf.col("i.isbn").alias("i"),
+            psf.col("j.isbn").alias("j"),
             dot_udf("i.norm", "j.norm").alias("dot"))\
         .sort("i", "j")
 
